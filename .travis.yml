@@ -19,11 +19,17 @@ matrix:
       compiler: gcc
     - os: osx
       compiler: clang
+    - os: linux
+      env: TOOLKIT=true
 
-script:
-  - export CFLAGS=-Werror;
-  - make clean; make;
-  - make clean;
+script: |
+  if [[ ! TOOLKIT ]]; then
+    export CFLAGS=-Werror;
+    make clean; make;
+    make clean;
+  else
+    bash <(curl -s https://runtimeverification.com/toolkit/docker/bash) nightly-2018-08-29
+  fi
 
 before_deploy:
   - cd ..
